@@ -5,12 +5,18 @@ from pathlib import Path
 
 class FraudMLService:
     def __init__(self):
-        # Path setup relative to this file:
-        # __file__ is src/services/ml_service.py
-        # parents[0] is src/services/
-        # parents[1] is src/
-        # parents[2] is Task-1-Fraud_Detection/
-        BASE_DIR = Path(__file__).parents[2]
+        # Robust path setup relative to this file
+        current_file = Path(__file__).resolve()
+        # Find Task-1-Fraud_Detection/
+        def find_root():
+            for parent in current_file.parents:
+                if parent.name == "Task-1-Fraud_Detection":
+                    return parent
+                if (parent / "Task-1-Fraud_Detection").exists():
+                    return parent / "Task-1-Fraud_Detection"
+            return current_file.parents[2]
+        
+        BASE_DIR = find_root()
         model_dir = BASE_DIR / "models"
         
         self.model = joblib.load(model_dir / 'fraud_model.pkl')

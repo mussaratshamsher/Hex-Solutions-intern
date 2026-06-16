@@ -8,10 +8,19 @@ import plotly.express as px
 import os
 from pathlib import Path
 
-# Path setup
-BASE_DIR = Path(__file__).parents[3] # This is Task-1-Fraud_Detection folder
-DATA_PATH = BASE_DIR / "data" / "transactions.csv"
-MODEL_PATH = BASE_DIR / "models" / "fraud_model.pkl"
+# Robust path setup
+def get_project_root():
+    current_file = Path(__file__).resolve()
+    for parent in [current_file.parents[3], current_file.parents[4] if len(current_file.parents) > 4 else current_file.parents[3]]:
+        if parent.name == "Task-1-Fraud_Detection":
+            return parent
+        if (parent / "Task-1-Fraud_Detection").exists():
+            return parent / "Task-1-Fraud_Detection"
+    return current_file.parents[3]
+
+PROJECT_ROOT = get_project_root()
+DATA_PATH = PROJECT_ROOT / "data" / "transactions.csv"
+MODEL_PATH = PROJECT_ROOT / "models" / "fraud_model.pkl"
 
 st.set_page_config(page_title="Model Metrics", layout="wide")
 st.title("📈 Model Performance Metrics")

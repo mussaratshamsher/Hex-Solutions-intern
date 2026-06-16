@@ -3,9 +3,17 @@ import sys
 import os
 from pathlib import Path
 
-# Path setup for imports
-BASE_DIR = Path(__file__).parents[3] # This is Task-1-Fraud_Detection folder
-SRC_DIR = BASE_DIR / "src"
+# Robust path setup for imports
+def get_src_dir():
+    current_file = Path(__file__).resolve()
+    for parent in [current_file.parents[3], current_file.parents[4] if len(current_file.parents) > 4 else current_file.parents[3]]:
+        if parent.name == "Task-1-Fraud_Detection":
+            return parent / "src"
+        if (parent / "Task-1-Fraud_Detection").exists():
+            return parent / "Task-1-Fraud_Detection" / "src"
+    return current_file.parents[3] / "src"
+
+SRC_DIR = get_src_dir()
 if str(SRC_DIR) not in sys.path:
     sys.path.append(str(SRC_DIR))
 

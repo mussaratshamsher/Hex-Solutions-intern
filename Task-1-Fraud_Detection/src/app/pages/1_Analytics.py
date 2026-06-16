@@ -5,9 +5,18 @@ import sys
 import os
 from pathlib import Path
 
-# Path setup
-BASE_DIR = Path(__file__).parents[3] # This is Task-1-Fraud_Detection folder
-DATA_PATH = BASE_DIR / "data" / "transactions.csv"
+# Robust path setup
+def get_data_path():
+    current_file = Path(__file__).resolve()
+    # Go up to find Task-1-Fraud_Detection
+    for parent in [current_file.parents[3], current_file.parents[4] if len(current_file.parents) > 4 else current_file.parents[3]]:
+        if parent.name == "Task-1-Fraud_Detection":
+            return parent / "data" / "transactions.csv"
+        if (parent / "Task-1-Fraud_Detection").exists():
+            return parent / "Task-1-Fraud_Detection" / "data" / "transactions.csv"
+    return current_file.parents[3] / "data" / "transactions.csv"
+
+DATA_PATH = get_data_path()
 
 st.set_page_config(page_title="Fraud Analytics", layout="wide")
 st.title("📊 Fraud Analytics Dashboard")
