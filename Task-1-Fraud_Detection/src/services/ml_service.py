@@ -1,13 +1,17 @@
 import pandas as pd
 import joblib
 import os
+from pathlib import Path
 
 class FraudMLService:
     def __init__(self):
-        model_dir = 'models'
-        self.model = joblib.load(os.path.join(model_dir, 'fraud_model.pkl'))
-        self.le_city = joblib.load(os.path.join(model_dir, 'le_city.pkl'))
-        self.le_device = joblib.load(os.path.join(model_dir, 'le_device.pkl'))
+        # Path setup relative to this file
+        BASE_DIR = Path(__file__).parents[2]
+        model_dir = BASE_DIR / "models"
+        
+        self.model = joblib.load(model_dir / 'fraud_model.pkl')
+        self.le_city = joblib.load(model_dir / 'le_city.pkl')
+        self.le_device = joblib.load(model_dir / 'le_device.pkl')
 
     def predict(self, input_data):
         # input_data is a dict with:
