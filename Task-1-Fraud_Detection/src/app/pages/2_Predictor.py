@@ -41,7 +41,7 @@ with col2:
 
 st.markdown("---")
 
-if st.button("🚀 Run Fraud Risk Analysis", use_container_width=True):
+if st.button("🚀 Run Fraud Risk Analysis", width='stretch'):
     data = {
         'amount': amount,
         'hour': hour,

@@ -86,11 +86,11 @@ if not df.empty and model:
                         x=['Not Fraud', 'Fraud'],
                         y=['Not Fraud', 'Fraud'],
                         color_continuous_scale='Reds')
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     st.markdown("### 🏆 Feature Importance")
     importance = pd.DataFrame({'Feature': X.columns, 'Importance': model.feature_importances_}).sort_values('Importance', ascending=True)
     fig_imp = px.bar(importance, x='Importance', y='Feature', orientation='h', color='Importance', color_continuous_scale='Viridis')
-    st.plotly_chart(fig_imp, use_container_width=True)
+    st.plotly_chart(fig_imp, width='stretch')
 else:
     st.warning("Data or Model could not be loaded.")
