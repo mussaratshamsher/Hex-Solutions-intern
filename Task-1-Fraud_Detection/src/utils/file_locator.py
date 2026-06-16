@@ -5,7 +5,8 @@ import streamlit as st
 @st.cache_resource
 def find_file(filename):
     """Deep searches for a file in the project directory."""
-    root = Path.cwd()
+    # Project root is 3 levels up from this file (src/utils/file_locator.py)
+    root = Path(__file__).resolve().parent.parent.parent
     
     # Perform the search
     for root_dir, dirs, files in os.walk(root):
@@ -13,7 +14,8 @@ def find_file(filename):
             return Path(root_dir) / filename
             
     # Diagnostic logging if not found
-    error_msg = f"File '{filename}' not found. Current CWD: {root}\n"
+    error_msg = f"File '{filename}' not found. Current CWD: {Path.cwd()}\n"
+    error_msg += f"Project Root Searched: {root}\n"
     error_msg += "Partial Directory Tree:\n"
     
     # List top-level directories to understand structure
