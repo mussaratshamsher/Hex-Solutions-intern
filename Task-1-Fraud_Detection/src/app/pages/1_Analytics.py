@@ -5,16 +5,27 @@ import sys
 import os
 from pathlib import Path
 
-# Robust path setup
-def get_project_root():
-    curr = Path(__file__).resolve()
-    for parent in curr.parents:
-        if parent.name == 'src':
-            return parent.parent
-    return curr.parents[3]
+# Robust path setup with smart search
+def find_path(rel_path):
+    # Try multiple anchor points
+    anchors = [
+        Path(__file__).resolve().parent,
+        Path.cwd(),
+        Path(__file__).resolve().parents[3],
+        Path(__file__).resolve().parents[2]
+    ]
+    for anchor in anchors:
+        target = (anchor / rel_path).resolve()
+        if target.exists():
+            return target
+        # Try siblings
+        target = (anchor / "Task-1-Fraud_Detection" / rel_path).resolve()
+        if target.exists():
+            return target
+    # Last resort: absolute fallback to standard structure
+    return Path(__file__).resolve().parents[3] / rel_path
 
-PROJECT_ROOT = get_project_root()
-DATA_PATH = PROJECT_ROOT / "data" / "transactions.csv"
+DATA_PATH = find_path("data/transactions.csv")
 
 st.set_page_config(page_title="Fraud Analytics", layout="wide")
 st.title("📊 Fraud Analytics Dashboard")

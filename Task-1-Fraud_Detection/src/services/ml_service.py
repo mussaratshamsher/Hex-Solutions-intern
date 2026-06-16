@@ -5,16 +5,26 @@ from pathlib import Path
 
 class FraudMLService:
     def __init__(self):
-        # Robust path setup relative to this file
-        curr = Path(__file__).resolve()
-        def find_root():
-            for parent in curr.parents:
-                if parent.name == 'src':
-                    return parent.parent
-            return curr.parents[2] # Fallback
-        
-        BASE_DIR = find_root()
-        model_dir = BASE_DIR / "models"
+        # Robust path setup with smart search
+        def find_path(rel_path):
+            curr = Path(__file__).resolve()
+            anchors = [
+                curr.parent,
+                Path.cwd(),
+                curr.parents[2],
+                curr.parents[1]
+            ]
+            for anchor in anchors:
+                target = (anchor / rel_path).resolve()
+                if target.exists():
+                    return target
+                target = (anchor / "Task-1-Fraud_Detection" / rel_path).resolve()
+                if target.exists():
+                    return target
+            return curr.parents[2] / rel_path
+
+        model_path = find_path("models/fraud_model.pkl")
+        model_dir = model_path.parent
         
         self.model = joblib.load(model_dir / 'fraud_model.pkl')
         self.le_city = joblib.load(model_dir / 'le_city.pkl')
