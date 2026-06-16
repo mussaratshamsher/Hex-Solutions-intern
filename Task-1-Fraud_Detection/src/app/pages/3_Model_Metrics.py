@@ -10,13 +10,11 @@ from pathlib import Path
 
 # Robust path setup
 def get_project_root():
-    current_file = Path(__file__).resolve()
-    for parent in [current_file.parents[3], current_file.parents[4] if len(current_file.parents) > 4 else current_file.parents[3]]:
-        if parent.name == "Task-1-Fraud_Detection":
-            return parent
-        if (parent / "Task-1-Fraud_Detection").exists():
-            return parent / "Task-1-Fraud_Detection"
-    return current_file.parents[3]
+    curr = Path(__file__).resolve()
+    for parent in curr.parents:
+        if parent.name == 'src':
+            return parent.parent
+    return curr.parents[3]
 
 PROJECT_ROOT = get_project_root()
 DATA_PATH = PROJECT_ROOT / "data" / "transactions.csv"

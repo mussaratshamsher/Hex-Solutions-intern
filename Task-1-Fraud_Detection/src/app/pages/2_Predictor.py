@@ -5,13 +5,11 @@ from pathlib import Path
 
 # Robust path setup for imports
 def get_src_dir():
-    current_file = Path(__file__).resolve()
-    for parent in [current_file.parents[3], current_file.parents[4] if len(current_file.parents) > 4 else current_file.parents[3]]:
-        if parent.name == "Task-1-Fraud_Detection":
-            return parent / "src"
-        if (parent / "Task-1-Fraud_Detection").exists():
-            return parent / "Task-1-Fraud_Detection" / "src"
-    return current_file.parents[3] / "src"
+    curr = Path(__file__).resolve()
+    for parent in curr.parents:
+        if parent.name == 'src':
+            return parent
+    return curr.parents[3] / "src"
 
 SRC_DIR = get_src_dir()
 if str(SRC_DIR) not in sys.path:

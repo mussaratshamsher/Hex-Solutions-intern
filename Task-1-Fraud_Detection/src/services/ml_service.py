@@ -6,15 +6,12 @@ from pathlib import Path
 class FraudMLService:
     def __init__(self):
         # Robust path setup relative to this file
-        current_file = Path(__file__).resolve()
-        # Find Task-1-Fraud_Detection/
+        curr = Path(__file__).resolve()
         def find_root():
-            for parent in current_file.parents:
-                if parent.name == "Task-1-Fraud_Detection":
-                    return parent
-                if (parent / "Task-1-Fraud_Detection").exists():
-                    return parent / "Task-1-Fraud_Detection"
-            return current_file.parents[2]
+            for parent in curr.parents:
+                if parent.name == 'src':
+                    return parent.parent
+            return curr.parents[2] # Fallback
         
         BASE_DIR = find_root()
         model_dir = BASE_DIR / "models"

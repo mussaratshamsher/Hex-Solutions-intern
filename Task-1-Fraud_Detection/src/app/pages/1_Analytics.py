@@ -6,17 +6,15 @@ import os
 from pathlib import Path
 
 # Robust path setup
-def get_data_path():
-    current_file = Path(__file__).resolve()
-    # Go up to find Task-1-Fraud_Detection
-    for parent in [current_file.parents[3], current_file.parents[4] if len(current_file.parents) > 4 else current_file.parents[3]]:
-        if parent.name == "Task-1-Fraud_Detection":
-            return parent / "data" / "transactions.csv"
-        if (parent / "Task-1-Fraud_Detection").exists():
-            return parent / "Task-1-Fraud_Detection" / "data" / "transactions.csv"
-    return current_file.parents[3] / "data" / "transactions.csv"
+def get_project_root():
+    curr = Path(__file__).resolve()
+    for parent in curr.parents:
+        if parent.name == 'src':
+            return parent.parent
+    return curr.parents[3]
 
-DATA_PATH = get_data_path()
+PROJECT_ROOT = get_project_root()
+DATA_PATH = PROJECT_ROOT / "data" / "transactions.csv"
 
 st.set_page_config(page_title="Fraud Analytics", layout="wide")
 st.title("📊 Fraud Analytics Dashboard")
