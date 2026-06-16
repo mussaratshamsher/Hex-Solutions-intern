@@ -5,7 +5,11 @@ from pathlib import Path
 
 class FraudMLService:
     def __init__(self):
-        # Path setup relative to this file
+        # Path setup relative to this file:
+        # __file__ is src/services/ml_service.py
+        # parents[0] is src/services/
+        # parents[1] is src/
+        # parents[2] is Task-1-Fraud_Detection/
         BASE_DIR = Path(__file__).parents[2]
         model_dir = BASE_DIR / "models"
         
