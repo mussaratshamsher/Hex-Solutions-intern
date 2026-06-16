@@ -5,28 +5,17 @@ import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report, f1_score, precision_score, recall_score
 import plotly.express as px
-import os
+import sys
 from pathlib import Path
 
-# Robust path setup with smart search
-def find_path(rel_path):
-    anchors = [
-        Path(__file__).resolve().parent,
-        Path.cwd(),
-        Path(__file__).resolve().parents[3],
-        Path(__file__).resolve().parents[2]
-    ]
-    for anchor in anchors:
-        target = (anchor / rel_path).resolve()
-        if target.exists():
-            return target
-        target = (anchor / "Task-1-Fraud_Detection" / rel_path).resolve()
-        if target.exists():
-            return target
-    return Path(__file__).resolve().parents[3] / rel_path
+# Fix import path for utils
+SRC_DIR = Path(__file__).parents[2]
+if str(SRC_DIR) not in sys.path:
+    sys.path.append(str(SRC_DIR))
+from utils.file_locator import find_file
 
-DATA_PATH = find_path("data/transactions.csv")
-MODEL_PATH = find_path("models/fraud_model.pkl")
+DATA_PATH = find_file("transactions.csv")
+MODEL_PATH = find_file("fraud_model.pkl")
 
 st.set_page_config(page_title="Model Metrics", layout="wide")
 st.title("📈 Model Performance Metrics")

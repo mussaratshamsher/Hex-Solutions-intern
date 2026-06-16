@@ -1,34 +1,20 @@
 import pandas as pd
 import joblib
-import os
+import sys
 from pathlib import Path
+
+# Fix import path for utils
+SRC_DIR = Path(__file__).parents[1]
+if str(SRC_DIR) not in sys.path:
+    sys.path.append(str(SRC_DIR))
+from utils.file_locator import find_file
 
 class FraudMLService:
     def __init__(self):
-        # Robust path setup with smart search
-        def find_path(rel_path):
-            curr = Path(__file__).resolve()
-            anchors = [
-                curr.parent,
-                Path.cwd(),
-                curr.parents[2],
-                curr.parents[1]
-            ]
-            for anchor in anchors:
-                target = (anchor / rel_path).resolve()
-                if target.exists():
-                    return target
-                target = (anchor / "Task-1-Fraud_Detection" / rel_path).resolve()
-                if target.exists():
-                    return target
-            return curr.parents[2] / rel_path
-
-        model_path = find_path("models/fraud_model.pkl")
-        model_dir = model_path.parent
-        
-        self.model = joblib.load(model_dir / 'fraud_model.pkl')
-        self.le_city = joblib.load(model_dir / 'le_city.pkl')
-        self.le_device = joblib.load(model_dir / 'le_device.pkl')
+        # Find model files using utility
+        self.model = joblib.load(find_file('fraud_model.pkl'))
+        self.le_city = joblib.load(find_file('le_city.pkl'))
+        self.le_device = joblib.load(find_file('le_device.pkl'))
 
     def predict(self, input_data):
         # input_data is a dict with:
