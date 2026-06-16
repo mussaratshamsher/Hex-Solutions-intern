@@ -2,19 +2,21 @@ import pandas as pd
 import joblib
 import sys
 from pathlib import Path
-
-# Fix import path for utils
-SRC_DIR = Path(__file__).parents[1]
-if str(SRC_DIR) not in sys.path:
-    sys.path.append(str(SRC_DIR))
 from utils.file_locator import find_file
 
 class FraudMLService:
     def __init__(self):
         # Find model files using utility
-        self.model = joblib.load(find_file('fraud_model.pkl'))
-        self.le_city = joblib.load(find_file('le_city.pkl'))
-        self.le_device = joblib.load(find_file('le_device.pkl'))
+        self.model_path = find_file('fraud_model.pkl')
+        self.le_city_path = find_file('le_city.pkl')
+        self.le_device_path = find_file('le_device.pkl')
+        
+        if not self.model_path or not self.le_city_path or not self.le_device_path:
+            raise FileNotFoundError("One or more model/encoder files could not be located.")
+
+        self.model = joblib.load(self.model_path)
+        self.le_city = joblib.load(self.le_city_path)
+        self.le_device = joblib.load(self.le_device_path)
 
     def predict(self, input_data):
         # input_data is a dict with:
