@@ -4,8 +4,8 @@ import os
 from pathlib import Path
 
 # Path setup for imports
-BASE_DIR = Path(__file__).parents[3]
-SRC_DIR = BASE_DIR / "Task-1-Fraud_Detection" / "src"
+BASE_DIR = Path(__file__).parents[3] # This is Task-1-Fraud_Detection folder
+SRC_DIR = BASE_DIR / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.append(str(SRC_DIR))
 

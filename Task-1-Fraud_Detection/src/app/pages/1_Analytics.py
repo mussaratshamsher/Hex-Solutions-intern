@@ -6,8 +6,8 @@ import os
 from pathlib import Path
 
 # Path setup
-BASE_DIR = Path(__file__).parents[3]
-DATA_PATH = BASE_DIR / "Task-1-Fraud_Detection" / "data" / "transactions.csv"
+BASE_DIR = Path(__file__).parents[3] # This is Task-1-Fraud_Detection folder
+DATA_PATH = BASE_DIR / "data" / "transactions.csv"
 
 st.set_page_config(page_title="Fraud Analytics", layout="wide")
 st.title("📊 Fraud Analytics Dashboard")
