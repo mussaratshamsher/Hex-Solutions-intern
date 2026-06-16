@@ -14,23 +14,33 @@ if str(SRC_DIR) not in sys.path:
     sys.path.append(str(SRC_DIR))
 from utils.file_locator import find_file
 
+# --- Debugging ---
 DATA_PATH = find_file("transactions.csv")
 MODEL_PATH = find_file("fraud_model.pkl")
+st.write(f"DEBUG: DATA_PATH: {DATA_PATH}, type: {type(DATA_PATH)}")
+st.write(f"DEBUG: MODEL_PATH: {MODEL_PATH}, type: {type(MODEL_PATH)}")
+# -----------------
 
 st.set_page_config(page_title="Model Metrics", layout="wide")
 st.title("📈 Model Performance Metrics")
 
 @st.cache_resource
 def load_model():
+    if MODEL_PATH is None:
+        st.error("Model path not found (find_file returned None)")
+        return None
     if not MODEL_PATH.exists():
-        st.error(f"Model file not found at {MODEL_PATH}")
+        st.error(f"Model file does not exist at {MODEL_PATH}")
         return None
     return joblib.load(MODEL_PATH)
 
 @st.cache_data
 def get_data():
+    if DATA_PATH is None:
+        st.error("Data path not found (find_file returned None)")
+        return pd.DataFrame()
     if not DATA_PATH.exists():
-        st.error(f"Data file not found at {DATA_PATH}")
+        st.error(f"Data file does not exist at {DATA_PATH}")
         return pd.DataFrame()
     df = pd.read_csv(DATA_PATH)
     # Simple re-encoding for metrics calculation
