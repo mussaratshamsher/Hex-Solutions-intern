@@ -76,7 +76,7 @@ if not df.empty and model:
         st.markdown("### 📊 Classification Report")
         report = classification_report(y_test, y_pred, output_dict=True)
         report_df = pd.DataFrame(report).transpose()
-        st.dataframe(report_df.style.background_gradient(cmap='Reds'))
+        st.dataframe(report_df)
 
     with col_r:
         st.markdown("### 🔍 Confusion Matrix")
