@@ -45,7 +45,7 @@ with col2:
     root = Path(__file__).resolve().parent.parent.parent
     img_options = [
         root / "fraud.png",
-        root / "src" / "hacker.png"
+        root / "src" / "hacker.png",
     ]
     
     img_path = None
