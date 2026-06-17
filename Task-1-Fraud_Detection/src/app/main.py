@@ -1,4 +1,5 @@
 import streamlit as st
+from pathlib import Path
 
 st.set_page_config(
     page_title="Fraud Investigator | AI-Powered FinTech",
@@ -40,7 +41,23 @@ with col1:
     """)
 
 with col2:
-    st.image("https://img.icons8.com/clouds/256/000000/security-shield.png", width=200)
+    # Robust image path lookup
+    root = Path(__file__).resolve().parent.parent.parent
+    img_options = [
+        root / "fraud.png",
+        root / "src" / "hacker.png"
+    ]
+    
+    img_path = None
+    for p in img_options:
+        if p.exists():
+            img_path = p
+            break
+            
+    if img_path:
+        st.image(str(img_path), width=200)
+    else:
+        st.image("https://img.icons8.com/clouds/256/000000/security-shield.png", width=200)
     st.success("System Status: **Active**")
     st.info("Model Version: **v1.0.2 (XGBoost)**")
 
