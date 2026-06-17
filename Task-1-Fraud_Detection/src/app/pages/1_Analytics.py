@@ -5,10 +5,11 @@ import sys
 from pathlib import Path
 
 # Fix import path for utils
-SRC_DIR = Path(__file__).parents[2]
-if str(SRC_DIR) not in sys.path:
-    sys.path.append(str(SRC_DIR))
+APP_DIR = Path(__file__).parents[2] / "app"
+if str(APP_DIR) not in sys.path:
+    sys.path.append(str(APP_DIR))
 from utils.file_locator import find_file
+from utils.sidebar_nav import show_sidebar
 
 # Load Custom CSS
 def local_css(file_name):
@@ -19,8 +20,11 @@ DATA_PATH = find_file("transactions.csv")
 
 st.set_page_config(page_title="Fraud Analytics", layout="wide")
 
+# Apply Sidebar
+show_sidebar()
+
 # Apply CSS
-css_path = SRC_DIR / "app" / "style.css"
+css_path = APP_DIR / "style.css"
 if css_path.exists():
     local_css(str(css_path))
 

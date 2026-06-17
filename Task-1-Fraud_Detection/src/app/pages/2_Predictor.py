@@ -6,19 +6,13 @@ import os
 from pathlib import Path
 
 # Robust path setup for imports
-def get_src_dir():
-    curr = Path(__file__).resolve()
-    for parent in curr.parents:
-        if parent.name == 'src':
-            return parent
-    return curr.parents[3] / "src"
-
-SRC_DIR = get_src_dir()
-if str(SRC_DIR) not in sys.path:
-    sys.path.append(str(SRC_DIR))
+APP_DIR = Path(__file__).parents[2] / "app"
+if str(APP_DIR) not in sys.path:
+    sys.path.append(str(APP_DIR))
 
 from services.ml_service import FraudMLService
 from services.groq_client import GroqFraudInvestigator
+from utils.sidebar_nav import show_sidebar
 
 # Load Custom CSS
 def local_css(file_name):
@@ -27,8 +21,11 @@ def local_css(file_name):
 
 st.set_page_config(page_title="Fraud Predictor", layout="wide")
 
+# Apply Sidebar
+show_sidebar()
+
 # Apply CSS
-css_path = SRC_DIR / "app" / "style.css"
+css_path = APP_DIR / "style.css"
 if css_path.exists():
     local_css(str(css_path))
 

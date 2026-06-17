@@ -1,8 +1,12 @@
 import streamlit as st
+import sys
 from pathlib import Path
 
 # Fix import path for utils
-SRC_DIR = Path(__file__).parents[2]
+APP_DIR = Path(__file__).parents[2] / "app"
+if str(APP_DIR) not in sys.path:
+    sys.path.append(str(APP_DIR))
+from utils.sidebar_nav import show_sidebar
 
 # Load Custom CSS
 def local_css(file_name):
@@ -11,8 +15,11 @@ def local_css(file_name):
 
 st.set_page_config(page_title="App Info", layout="wide")
 
+# Apply Sidebar
+show_sidebar()
+
 # Apply CSS
-css_path = SRC_DIR / "app" / "style.css"
+css_path = APP_DIR / "style.css"
 if css_path.exists():
     local_css(str(css_path))
 

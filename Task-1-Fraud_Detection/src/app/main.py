@@ -1,5 +1,10 @@
 import streamlit as st
 from pathlib import Path
+import sys
+
+# Add src/app to path for utils imports
+sys.path.append(str(Path(__file__).parent))
+from utils.sidebar_nav import show_sidebar
 
 # Load Custom CSS
 def local_css(file_name):
@@ -18,19 +23,7 @@ if css_path.exists():
     local_css(str(css_path))
 
 # Sidebar Info
-st.sidebar.title("🛡️ Investigator Panel")
-st.sidebar.markdown("---")
-st.sidebar.info("""
-**Welcome, Agent.** 
-Use this dashboard to monitor and analyze fraudulent activities in real-time.
-""")
-
-st.sidebar.markdown("### 🛠️ Navigation")
-st.sidebar.page_link("main.py", label="Home", icon="🏠")
-st.sidebar.page_link("pages/1_Analytics.py", label="Market Analytics", icon="📊")
-st.sidebar.page_link("pages/2_Predictor.py", label="Fraud Predictor", icon="🔍")
-st.sidebar.page_link("pages/3_Model_Metrics.py", label="Model Health", icon="📈")
-st.sidebar.page_link("pages/4_Info.py", label="System Info", icon="ℹ️")
+show_sidebar()
 
 # Main Content
 st.title("🛡️ AI-Powered Digital Wallet & Fraud Investigator")

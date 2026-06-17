@@ -1,3 +1,8 @@
+/* Hide Automatic Streamlit Navigation */
+[data-testid="stSidebarNav"] {
+    display: none;
+}
+
 /* Modern CSS for Fraud Investigator */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
