@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.graph_objects as go
 import sys
 import os
 from pathlib import Path
@@ -19,7 +20,18 @@ if str(SRC_DIR) not in sys.path:
 from services.ml_service import FraudMLService
 from services.groq_client import GroqFraudInvestigator
 
+# Load Custom CSS
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
 st.set_page_config(page_title="Fraud Predictor", layout="wide")
+
+# Apply CSS
+css_path = SRC_DIR / "app" / "style.css"
+if css_path.exists():
+    local_css(str(css_path))
+
 st.title("🔍 Transaction Fraud Predictor")
 st.markdown("Evaluate fraud risk via manual entry or batch CSV upload.")
 
@@ -45,7 +57,7 @@ with tab1:
 
     st.markdown("---")
 
-    if st.button("🚀 Run Fraud Risk Analysis", key="single_btn", width='stretch'):
+    if st.button("🚀 Run Fraud Risk Analysis", key="single_btn", use_container_width=True):
         data = {
             'amount': amount,
             'hour': hour,
@@ -68,7 +80,32 @@ with tab1:
             res_col1, res_col2 = st.columns([1, 2])
             
             with res_col1:
-                st.metric("Fraud Probability", f"{result['fraud_probability']:.2%}")
+                st.markdown("### Risk Assessment")
+                
+                # Gauge Chart
+                prob = result['fraud_probability']
+                fig_gauge = go.Figure(go.Indicator(
+                    mode = "gauge+number",
+                    value = prob * 100,
+                    domain = {'x': [0, 1], 'y': [0, 1]},
+                    title = {'text': "Fraud Probability", 'font': {'size': 24}},
+                    gauge = {
+                        'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "white"},
+                        'bar': {'color': "#FF4B4B" if result['is_fraud'] else "#00CC96"},
+                        'bgcolor': "rgba(0,0,0,0)",
+                        'borderwidth': 2,
+                        'bordercolor': "gray",
+                        'steps': [
+                            {'range': [0, 30], 'color': 'rgba(0, 204, 150, 0.1)'},
+                            {'range': [30, 70], 'color': 'rgba(255, 255, 0, 0.1)'},
+                            {'range': [70, 100], 'color': 'rgba(255, 75, 75, 0.1)'}],
+                        'threshold': {
+                            'line': {'color': "red", 'width': 4},
+                            'thickness': 0.75,
+                            'value': 70}}))
+                
+                fig_gauge.update_layout(paper_bgcolor='rgba(0,0,0,0)', font={'color': "white", 'family': "Arial"})
+                st.plotly_chart(fig_gauge, use_container_width=True)
                 
                 if result['is_fraud']:
                     st.error("🚨 HIGH RISK DETECTED")
@@ -82,11 +119,11 @@ with tab1:
                         try:
                             investigator = GroqFraudInvestigator()
                             report = investigator.analyze(data, result)
-                            st.markdown(report)
+                            st.markdown(f'<div class="custom-card" style="border-left-color: #FF4B4B;">{report}</div>', unsafe_allow_html=True)
                         except Exception as e:
                             st.error(f"AI Service Error: {str(e)}")
                 else:
-                    st.write("No deep investigation required for low-risk transactions.")
+                    st.info("No deep investigation required for low-risk transactions.")
 
 with tab2:
     st.subheader("📤 Batch Processing")
@@ -101,9 +138,9 @@ with tab2:
     if uploaded_file is not None:
         df_upload = pd.read_csv(uploaded_file)
         st.write("### Preview of Uploaded Data")
-        st.dataframe(df_upload.head())
+        st.dataframe(df_upload.head(), use_container_width=True)
         
-        if st.button("🚀 Process Batch", key="batch_btn"):
+        if st.button("🚀 Process Batch", key="batch_btn", use_container_width=True):
             with st.spinner("Scoring batch transactions..."):
                 try:
                     ml_service = FraudMLService()
@@ -123,7 +160,7 @@ with tab2:
                     # Combine and show
                     res_df = pd.concat([df_upload, pd.DataFrame(results)], axis=1)
                     st.success("Batch Processing Complete!")
-                    st.dataframe(res_df)
+                    st.dataframe(res_df, use_container_width=True)
                     
                     # Download results
                     csv_res = res_df.to_csv(index=False).encode('utf-8')

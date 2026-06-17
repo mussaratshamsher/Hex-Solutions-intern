@@ -1,0 +1,67 @@
+/* Modern CSS for Fraud Investigator */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+.stApp {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Glassmorphism Effect for Cards */
+.css-1r6slb0, .stMetric {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+/* Main Title Gradient */
+h1 {
+    background: linear-gradient(90deg, #FF4B4B, #FF8E53);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800 !important;
+}
+
+/* Sidebar Customization */
+section[data-testid="stSidebar"] {
+    background-color: #0E1117;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Button Enhancements */
+div.stButton > button:first-child {
+    background: linear-gradient(90deg, #FF4B4B, #FF8E53);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+div.stButton > button:first-child:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 75, 75, 0.4);
+}
+
+/* Metric Labels */
+[data-testid="stMetricLabel"] {
+    font-size: 1rem !important;
+    color: #808495 !important;
+}
+
+[data-testid="stMetricValue"] {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+}
+
+/* Custom Card Wrapper */
+.custom-card {
+    background: #1E2129;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-left: 5px solid #FF4B4B;
+    margin-bottom: 1rem;
+}

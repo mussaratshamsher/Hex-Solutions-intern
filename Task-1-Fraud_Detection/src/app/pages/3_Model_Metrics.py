@@ -14,10 +14,23 @@ if str(SRC_DIR) not in sys.path:
     sys.path.append(str(SRC_DIR))
 from utils.file_locator import find_file
 
-# -----------------
+# Load Custom CSS
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+MODEL_PATH = find_file("fraud_model.pkl")
+DATA_PATH = find_file("transactions.csv")
 
 st.set_page_config(page_title="Model Metrics", layout="wide")
+
+# Apply CSS
+css_path = SRC_DIR / "app" / "style.css"
+if css_path.exists():
+    local_css(str(css_path))
+
 st.title("📈 Model Performance Metrics")
+st.markdown("Technical breakdown of the XGBoost fraud detection model.")
 
 @st.cache_resource
 def load_model():
@@ -58,10 +71,14 @@ if not df.empty and model:
 
     # Top level metrics
     m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Accuracy", f"{(y_test == y_pred).mean():.2%}")
-    m2.metric("F1-Score", f"{f1_score(y_test, y_pred):.2f}")
-    m3.metric("Precision", f"{precision_score(y_test, y_pred):.2f}")
-    m4.metric("Recall", f"{recall_score(y_test, y_pred):.2f}")
+    with m1:
+        st.metric("Accuracy", f"{(y_test == y_pred).mean():.2%}", help="Overall correctly predicted transactions.")
+    with m2:
+        st.metric("F1-Score", f"{f1_score(y_test, y_pred):.2f}", help="Balance between Precision and Recall.")
+    with m3:
+        st.metric("Precision", f"{precision_score(y_test, y_pred):.2f}", help="Of all predicted fraud, how much was actually fraud?")
+    with m4:
+        st.metric("Recall", f"{recall_score(y_test, y_pred):.2f}", help="Of all actual fraud, how much did we catch?")
 
     st.markdown("---")
 
@@ -71,7 +88,7 @@ if not df.empty and model:
         st.markdown("### 📊 Classification Report")
         report = classification_report(y_test, y_pred, output_dict=True)
         report_df = pd.DataFrame(report).transpose()
-        st.dataframe(report_df)
+        st.dataframe(report_df, use_container_width=True)
 
     with col_r:
         st.markdown("### 🔍 Confusion Matrix")
@@ -80,12 +97,26 @@ if not df.empty and model:
                         labels=dict(x="Predicted", y="Actual"),
                         x=['Not Fraud', 'Fraud'],
                         y=['Not Fraud', 'Fraud'],
-                        color_continuous_scale='Reds')
-        st.plotly_chart(fig, width='stretch')
+                        color_continuous_scale='Reds',
+                        template="plotly_dark")
+        fig.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+        st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("### 🏆 Feature Importance")
     importance = pd.DataFrame({'Feature': X.columns, 'Importance': model.feature_importances_}).sort_values('Importance', ascending=True)
-    fig_imp = px.bar(importance, x='Importance', y='Feature', orientation='h', color='Importance', color_continuous_scale='Viridis')
-    st.plotly_chart(fig_imp, width='stretch')
+    fig_imp = px.bar(
+        importance, 
+        x='Importance', 
+        y='Feature', 
+        orientation='h', 
+        color='Importance', 
+        color_continuous_scale='Viridis',
+        template="plotly_dark"
+    )
+    fig_imp.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+    st.plotly_chart(fig_imp, use_container_width=True)
 else:
-    st.warning("Data or Model could not be loaded.")
+    st.warning("Data or Model could not be loaded. Please ensure mock models are created.")
+    if st.button("Generate Mock Models"):
+        # Placeholder for functionality if we wanted to add it
+        st.info("Run 'python create_mock_models.py' in the terminal.")
