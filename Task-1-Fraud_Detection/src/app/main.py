@@ -44,6 +44,7 @@ with col2:
     # Robust image path lookup
     root = Path(__file__).resolve().parent.parent.parent
     img_options = [
+        root / "src" / "hacker.png",
         root / "hacker.png",
     ]
     

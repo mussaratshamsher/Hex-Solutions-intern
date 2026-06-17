@@ -1,0 +1,6 @@
+amount,city,hour,device_id,account_age_days,transactions_today,failed_login_attempts,new_recipient
+500,Karachi,14,dev_1234,365,1,0,0
+45000,Lahore,3,dev_9999,10,5,1,1
+1200,Islamabad,10,dev_5555,100,2,0,0
+35000,Peshawar,2,dev_8888,2,4,0,1
+2500,Rawalpindi,18,dev_1111,50,1,0,0
