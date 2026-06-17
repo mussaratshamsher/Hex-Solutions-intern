@@ -14,11 +14,6 @@ if str(SRC_DIR) not in sys.path:
     sys.path.append(str(SRC_DIR))
 from utils.file_locator import find_file
 
-# --- Debugging ---
-DATA_PATH = find_file("transactions.csv")
-MODEL_PATH = find_file("fraud_model.pkl")
-st.write(f"DEBUG: DATA_PATH: {DATA_PATH}, type: {type(DATA_PATH)}")
-st.write(f"DEBUG: MODEL_PATH: {MODEL_PATH}, type: {type(MODEL_PATH)}")
 # -----------------
 
 st.set_page_config(page_title="Model Metrics", layout="wide")
