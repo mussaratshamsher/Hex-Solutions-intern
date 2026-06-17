@@ -92,4 +92,4 @@ with col_g3:
     st.write("For technical users. View Accuracy, F1-Score, and feature importance.")
 
 st.markdown("---")
-st.caption("Developed by Hex Solutions for the Agentic Hackathon | 2026")
+st.caption("Developed by Mussarat Shamsher for the HEX SOFTWARES (Internship) | 2026")

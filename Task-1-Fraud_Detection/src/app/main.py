@@ -33,7 +33,7 @@ st.sidebar.page_link("pages/3_Model_Metrics.py", label="Model Health", icon="�
 st.sidebar.page_link("pages/4_Info.py", label="System Info", icon="ℹ️")
 
 # Main Content
-st.title("🛡️ AI-Powered Digital Wallet Fraud Investigator")
+st.title("🛡️ AI-Powered Digital Wallet & Fraud Investigator")
 st.markdown("##### Real-time fraud detection and automated investigation for Pakistani Digital Wallets.")
 st.markdown("---")
 
@@ -42,7 +42,7 @@ col1, col2 = st.columns([1.5, 1])
 with col1:
     st.markdown("""
     ### 🚀 Mission Overview
-    This platform leverages state-of-the-art Machine Learning (XGBoost) and Generative AI (Llama 3 via Groq) to safeguard digital transactions.
+    This platform leverages state-of-the-art Machine Learning (XGBoost) and Generative AI to safeguard digital transactions.
     
     <div class="custom-card">
         <h4>⚡ Real-time Scoring</h4>
@@ -83,4 +83,4 @@ with col2:
     c2.info("v1.0.2 (XGBoost)")
 
 st.markdown("---")
-st.caption("Developed for the Agentic Hackathon | 2026 | Built with ❤️ using Streamlit & Groq")
+st.caption("Developed for the Agentic Hackathon | 2026 | Built with ❤️ using Streamlit")
